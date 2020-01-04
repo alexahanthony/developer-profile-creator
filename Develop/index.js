@@ -5,8 +5,25 @@ const util = require("util");
 const readFromFile = util.promisify(fs.readFile);
 const writeToFile = util.promisify(fs.writeFile);
 let mydataArr = {};
-
 const convertFactory = require("electron-html-to");
+
+const colors = {
+    green: {
+      topColor: "#53682F",
+    },
+    blue: {
+      topColor: "#5F64D3",
+    },
+    pink: {
+      topColor: "#EEBCC0",
+    },
+    red: {
+      topColor: "#A20005",
+    },
+    mocha: {
+      topColor: "#383331",
+    }
+  };
  
 var conversion = convertFactory({
   converterPath: convertFactory.converters.PDF
@@ -23,7 +40,7 @@ const questions = [
     type: "checkbox",
     message: "What color do you want the theme to be?",
     name: "color",
-    choices: ["green", "blue", "pink", "red"]
+    choices: ["green", "blue", "pink", "red", "mocha"]
   }
 ];
 
@@ -38,6 +55,7 @@ inquirer
   .then(function (response) {
     console.log(response.username);
     console.log(response.color[0]);
+    mydataArr.color=response.color[0];
     gs(response.username, function (err, data) {
       mydataArr.avatar = data.avatar;
       mydataArr.name = data.name;
@@ -62,12 +80,57 @@ inquirer
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-          <link rel="stylesheet" href="style.css">
           <title>GitHub Profile Generator</title>
+          <style>
+          @page {
+            margin: 0;
+          }
+         *,
+         *::after,
+         *::before {
+         box-sizing: border-box;
+         }
+         html, body {
+            background: ${colors[mydataArr.color].topColor};
+        }
+        img {
+          margin-top:2%;
+      }
+        a {
+            color: white;
+        }
+        .topColor {
+          color: ${colors[mydataArr.color].topColor};
+        }
+        .bio-container {
+            height: 50pt;
+        }
+        .three-links {
+            margin-top: 3%;
+            margin-bottom: 3%;
+        }
+        h4 {
+            font-size: medium;
+            color: cornflowerblue;
+            padding-top: 3%;
+        }
+        h5 {
+            font-size: medium;
+            font-weight: 200;
+        }
+        .stats {
+            margin-top: 1%;
+            margin-right: 1%;
+            margin-bottom: 1%;
+            margin-left: 1%;
+            border-radius: 25px;
+            padding: 10px;
+        }
+        </style>
       </head>
       
       <body>
-        <div class="container-fluid bg-dark text-light text-center">
+        <div class="container-fluid text-light text-center top">
           <img src=${mydataArr.avatar} class="rounded-circle" alt="Profile Image" width="300" height="300">
           <h1>${mydataArr.name}</h1>
           <h3>${mydataArr.username}</h3>
