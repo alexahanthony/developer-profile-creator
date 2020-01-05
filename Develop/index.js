@@ -5,8 +5,13 @@ const util = require("util");
 const readFromFile = util.promisify(fs.readFile);
 const writeToFile = util.promisify(fs.writeFile);
 let mydataArr = {};
-const convertFactory = require("electron-html-to");
+// const convertFactory = require("electron-html-to");
 
+var pdf = require('html-pdf');
+// var html = fs.readFileSync('./test/businesscard.html', 'utf8');
+var options = { format: 'Tabloid',
+orientation: "portrait" };
+ 
 const colors = {
     green: {
       topColor: "#53682F",
@@ -25,9 +30,9 @@ const colors = {
     }
   };
  
-var conversion = convertFactory({
-  converterPath: convertFactory.converters.PDF
-});
+// var conversion = convertFactory({
+//   converterPath: convertFactory.converters.PDF
+// });
 
 
 const questions = [
@@ -196,17 +201,21 @@ inquirer
       writeToFile("githubuser.html", htmlFile).then(function () {
         console.log("Successfully wrote to githubuser.html file");
       });
-      conversion({ html: htmlFile }, function(err, result) {
-        if (err) {
-          return console.error(err);
-        }
-       
-        console.log(result.numberOfPages);
-        console.log(result.logs);
-        result.stream.pipe(fs.createWriteStream('githubprofile.pdf'));
-        conversion.kill(); // necessary if you use the electron-server strategy, see bellow for details
+      // conversion({ html: htmlFile }, function(err, result) {
+      //   if (err) {
+      //     return console.error(err);
+      //   }
+
+      pdf.create(htmlFile, options).toFile('githubuser.pdf', function(err, res) {
+        if (err) return console.log(err);
+
+        console.log(res); // { filename: '/app/businesscard.pdf' }
       });
-    })
-  });
+        //console.log(result.numberOfPages);
+        //console.log(result.logs);
+        //result.stream.pipe(fs.createWriteStream('githubprofile.pdf'));
+        //conversion.kill(); // necessary if you use the electron-server strategy, see bellow for details
+      });
+    });
 
 

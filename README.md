@@ -38,6 +38,7 @@ There were no collaborators, (other than classmates and teacher feedback).
 *  "github-scraper": "^6.8.0"
 *  "inquirer": "^7.0.1"
 *  "pdfjs": "^2.3.2"
+*  "html-pdf": "^2.2.0",
 
 # Third-party assets: 
 https://getbootstrap.com/ for styling
