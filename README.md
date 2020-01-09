@@ -1,6 +1,6 @@
 # developer-profile-creator
 
-![GIF](./gif.webm)
+![GIF](./gif.gif)
 ![Screenshot](./screenshot.png)
 
 # Table of Contents (Optional)
